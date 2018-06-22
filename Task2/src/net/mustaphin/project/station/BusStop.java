@@ -23,7 +23,6 @@ public class BusStop {
     private final List<Passenger> passengerList = new ArrayList<>();
 
     public void take(Passenger passenger) {
-	// часть пассажиров удалять и генерировать
 	passangerInterract.take(passenger, passengerList, PLACE_IN);
 	// часть пассажиров удалять и генерировать
     }
