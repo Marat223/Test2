@@ -7,6 +7,7 @@ package net.mustaphin.project.station;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 import net.mustaphin.project.action.PassangerInterractor;
 import net.mustaphin.project.passenger.Passenger;
 
@@ -18,9 +19,16 @@ public class BusStop {
 
     private PassangerInterractor passangerInterract = new PassangerInterractor();
 
-    private final String PLACE_IN = "bus line number" + Thread.currentThread().getName() + " picked up the passenger";
-    private final String DROP = "bus line number" + Thread.currentThread().getName() + " droped the passenger";
+    private String name;
+    private final String PLACE_IN = "bus-stop" + name + " picked up the passenger";
+    private final String DROP = "bus-stop" + name + " droped the passenger";
     private final List<Passenger> passengerList = new ArrayList<>();
+    private Semaphore semaphore;
+
+    public BusStop(int permit, String name) {
+	this.semaphore = new Semaphore(permit);
+	this.name = name;
+    }
 
     public void take(Passenger passenger) {
 	passangerInterract.take(passenger, passengerList, PLACE_IN);

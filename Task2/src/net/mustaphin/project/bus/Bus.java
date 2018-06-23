@@ -33,7 +33,7 @@ public class Bus implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
 
-	BusStop busStop = new BusStop();
+	BusStop busStop = new BusStop(3, "Novynki");
 	offload(busStop);
 	take(busStop);
 	return sum;
