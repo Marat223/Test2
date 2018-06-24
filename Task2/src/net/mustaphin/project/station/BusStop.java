@@ -7,14 +7,13 @@ package net.mustaphin.project.station;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import net.mustaphin.project.bus.Bus;
 import net.mustaphin.project.passenger.Passenger;
-import net.mustaphin.project.passenger.PassengerGenerator;
 
 /**
  *
@@ -22,63 +21,67 @@ import net.mustaphin.project.passenger.PassengerGenerator;
  */
 public class BusStop {
 
-    private List<Passenger> passengerIn;
+    private List<Passenger> passengerBusStop;
     private Semaphore semaphore;
     private String name;
 
     public BusStop(int permit, String name) {
 	this.semaphore = new Semaphore(permit);
-	passengerIn = Arrays.asList(new Passenger(), new Passenger(), new Passenger());
+	passengerBusStop = Arrays.asList(new Passenger(), new Passenger(), new Passenger());
 	this.name = name;
     }
 
     public void interract(Bus bus) {
-	List<Passenger> passengerOut = bus.getPassanger();
+	List<Passenger> passengerBus = bus.getPassanger();
 	try {
 	    semaphore.acquire();
 	    System.out.println("Bus " + bus.getRouteName() + " came on bus-stop " + name);
-	    action(passengerOut);
+	    System.out.println("Passengers value in bus: " + passengerBus.size() + ", Passengers value in bus-stop:" + passengerBusStop.size());
+	    passengerBusStop.addAll(goOutBus(passengerBus));
+	    passengerBus.addAll(goOnBus());
 	} catch (InterruptedException ex) {
+	} finally {
+	    semaphore.release();
 	}
-	semaphore.release();
 	System.out.println("Bus " + bus.getRouteName() + " leave bus-stop " + name);
-	PassengerGenerator.getInstance().passangerComeAndGone(passengerIn);
+//	PassengerGenerator.getInstance().passangerComeAndGone(passengerBusStop);
     }
 
-    public void action(final List<Passenger> passengerOut) throws InterruptedException {//сделать декомпозицию
-	System.out.println("Passengers value in bus: " + passengerOut.size() + ", Passengers value in bus-stop:" + passengerIn.size());
-	List<Passenger> goOutPassenger = new ArrayList<>();
-	if (0 < passengerOut.size()) {
-	    ListIterator<Passenger> passenger = passengerOut.listIterator();
-	    int random = new Random().nextInt(passengerOut.size()) - 1;
+    private List<Passenger> goOnBus() throws InterruptedException {
+	List<Passenger> goInBusPassenger = new ArrayList<>();
+	if (0 < passengerBusStop.size()) {
+	    Iterator<Passenger> passengerIterator = passengerBusStop.iterator();
+	    int random = new Random().nextInt(passengerBusStop.size()) - 1;
+//	    System.out.println("Random to standing on stop-bus: " + random);
+	    while (passengerIterator.hasNext()) {
+		System.out.println("Passengers try to board the bus");
+//		if (random / 2 > passengerIn.size()) {
+		goInBusPassenger.add(passengerIterator.next());
+		passengerIterator.remove();//TODO не удаляются
+		System.out.println("Passanger got in bus");
+		TimeUnit.MILLISECONDS.sleep(200);
+//		}
+	    }
+	}
+	return goInBusPassenger;
+    }
+
+    private List<Passenger> goOutBus(List<Passenger> passengerBus) throws InterruptedException {
+	List<Passenger> goOutBusPassenger = new ArrayList<>();
+	if (0 < passengerBus.size()) {
+	    Iterator<Passenger> passenger = passengerBus.iterator();
+	    int random = new Random().nextInt(passengerBus.size()) - 1;
 	    System.out.println("Random to exit from bus: " + random);
 	    while (passenger.hasNext()) {
 		System.out.println("Passengers try to leave the bus");
-		if (random / 2 > passengerOut.size()) {
-		    goOutPassenger.add(passenger.next());
+		if (random / 2 > passengerBus.size()) {
+		    goOutBusPassenger.add(passenger.next());
 		    passenger.remove();
 		    System.out.println("Passanger got out bus");
 		    TimeUnit.MILLISECONDS.sleep(200);
 		}
 	    }
 	}
-	List<Passenger> goInPassenger = new ArrayList<>();
-	if (0 < passengerIn.size()) {
-	    ListIterator<Passenger> passenger = passengerIn.listIterator();
-	    int random = new Random().nextInt(passengerIn.size()) - 1;
-	    System.out.println("Random to standing on stop-bus: " + random);
-	    while (passenger.hasNext()) {
-		System.out.println("Passengers try to board the bus");
-		if (random / 2 > passengerIn.size()) {
-		    goInPassenger.add(passenger.next());
-		    passenger.remove();
-		    System.out.println("Passanger got in bus");
-		    TimeUnit.MILLISECONDS.sleep(200);
-		}
-	    }
-	}
-	passengerIn.addAll(goOutPassenger);
-	passengerOut.addAll(goInPassenger);
+	return goOutBusPassenger;
     }
-
 }
