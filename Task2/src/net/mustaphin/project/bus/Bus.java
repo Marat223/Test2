@@ -20,27 +20,28 @@ public class Bus implements Callable<Integer> {
 
     private PassangerInterractor passangerInterract = new PassangerInterractor();
     private int sum = 0;
-    private List<BusStop> line;
-    private final String PLACE_IN = "bus line number" + Thread.currentThread().getName() + " picked up the passenger";
-    private final String DROP = "bus line number" + Thread.currentThread().getName() + " droped the passenger";
     private final List<Passenger> passengerList = new ArrayList<>();
+    private List<BusStop> route = new ArrayList<>();
+    private final String PLACE_IN;
+    private final String DROP;
 
-    public Bus(String lineName, List<BusStop> line) {
-	Thread.currentThread().setName(lineName);
-	this.line = line;
+    public Bus(String routeName, List<BusStop> route) {
+	this.route.addAll(route);
+	PLACE_IN = "bus" + routeName + " route number" + route.getClass().getName() + " picked up the passenger";
+	DROP = "bus" + routeName + " route number" + route.getClass().getName() + " droped the passenger";
     }
 
     @Override
     public Integer call() throws Exception {
-
-	BusStop busStop = new BusStop(3, "Novynki");
-	offload(busStop);
-	take(busStop);
+	for (BusStop busStop : route) {
+	    offload(busStop);
+	    take(busStop);
+	}
 	return sum;
     }
 
     public void take(BusStop busStop) {
-	Passenger passenger = busStop.offload();
+	List<Passenger> passenger = busStop.offload();
 	passangerInterract.take(passenger, passengerList, PLACE_IN);
 	sum++;
     }

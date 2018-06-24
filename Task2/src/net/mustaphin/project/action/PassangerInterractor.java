@@ -5,6 +5,8 @@
  */
 package net.mustaphin.project.action;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import net.mustaphin.project.passenger.Passenger;
@@ -15,19 +17,28 @@ import net.mustaphin.project.passenger.Passenger;
  */
 public class PassangerInterractor {
 
-    public void take(Passenger passenger, List<Passenger> passengerList, String message) {
-	if (null != passenger) {
-	    passengerList.add(passenger);
-	    System.out.println(message);
+    public void take(List<Passenger> passengerOut, List<Passenger> passengerIn, String message) {
+	if (0 != passengerOut.size()) {
+	    passengerIn.addAll(passengerOut);
+	    System.out.println(message + ", passangers value: " + passengerOut.size());
 	}
     }
 
-    public Passenger offload(List<Passenger> passengerList, String message) {
-	Passenger passenger = null;
-	if (0 < passengerList.size()) {
-	    passenger = passengerList.remove(new Random().nextInt(passengerList.size()) - 1);
-	    System.out.println(message);
+    public List<Passenger> offload(List<Passenger> passengerIn, String message) {
+	List<Passenger> passengerOut = new ArrayList<>();
+	if (0 < passengerIn.size()) {
+	    Iterator<Passenger> passenger = passengerIn.iterator();
+	    while (passenger.hasNext()) {
+		int random = new Random().nextInt(passengerIn.size()) - 1;
+		if (random / 2 > passengerIn.size()) {
+		    Passenger passengerGone = passenger.next();
+		    passenger.remove();
+		    passengerOut.add(passengerGone);
+		    System.out.println(message);
+		}
+	    }
 	}
-	return passenger;
+	return passengerOut;
     }
+
 }

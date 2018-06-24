@@ -24,7 +24,7 @@ public class DuispatcherStation {
 	int totalSum = 0;
 	for (Bus bus : busPark) {
 	    Future<Integer> oneRace = executorService.submit(bus);
-	    totalSum += oneRace.get();
+//	    totalSum += oneRace.get();
 	}
 	System.out.println("total: " + totalSum);
     }
