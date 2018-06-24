@@ -11,14 +11,7 @@ package net.mustaphin.project.passenger;
  */
 public class Passenger {
 
-    private int id;
-
-    public int getId() {
-	return id;
-    }
-
-    public Passenger(int id) {
-	this.id = id;
+    public Passenger() {
     }
 
 }

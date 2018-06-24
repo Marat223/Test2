@@ -18,7 +18,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class PassengerGenerator {
 
-    private int lastId = 0;
     private static Lock lock = new ReentrantLock();
     private static Condition condition = lock.newCondition();
     private static PassengerGenerator instance = null;
@@ -40,18 +39,21 @@ public class PassengerGenerator {
     private PassengerGenerator() {
     }
 
-    public int getNextId() {
-	return ++lastId;
-    }
-
-    public void passangerGoneAndCame(List<Passenger> passengers) {
+    public void passangerCameAndGone(List<Passenger> passengers) {
 	ListIterator<Passenger> passenger = passengers.listIterator();
-	while (passenger.hasNext()) {
-	    int random = new Random().nextInt(passengers.size()) - 1;
-	    if (random / 2 > passengers.size()) {
-		passenger.remove();
-	    } else if (random / 2 < passengers.size()) {
-		passenger.add(new Passenger(lastId++));
+	int random = new Random().nextInt(passengers.size() + 10);
+	if (passenger.hasNext()) {
+	    while (passenger.hasNext()) {
+		if (random < passengers.size()) {
+		    passenger.remove();
+		} else if (random > passengers.size()) {
+		    passengers.add(new Passenger());
+		}
+	    }
+	} else {
+	    while (random > 0) {
+		passenger.add(new Passenger());
+		random--;
 	    }
 	}
     }

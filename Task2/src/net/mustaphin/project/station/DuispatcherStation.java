@@ -18,14 +18,13 @@ import net.mustaphin.project.bus.Bus;
  */
 public class DuispatcherStation {
 
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
-
     public void startShift(List<Bus> busPark) throws InterruptedException, ExecutionException {
-	int totalSum = 0;
+	ExecutorService executorService = Executors.newFixedThreadPool(busPark.size());
 	for (Bus bus : busPark) {
-	    Future<Integer> oneRace = executorService.submit(bus);
-//	    totalSum += oneRace.get();
+	    Future<Integer> submit = executorService.submit(bus);
+//	    System.out.println(submit.get());
 	}
-	System.out.println("total: " + totalSum);
+	executorService.shutdown();
+	System.out.println("TOTAL: ");
     }
 }
