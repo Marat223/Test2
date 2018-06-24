@@ -21,10 +21,18 @@ public class Test2 {
 	List<BusStop> line18 = Arrays.asList(novinky, peramoha, zakharova);
 	List<BusStop> line100 = Arrays.asList(circus, peramoha, kolas);
 	List<Bus> bus = new ArrayList<>();
-	bus.add(new Bus("18", line18));
-	bus.add(new Bus("100", line100));
+	bus.add(new Bus("18-1", line18));
+	bus.add(new Bus("100-1", line100));
+	bus.add(new Bus("18-2", line18));
+	bus.add(new Bus("100-2", line100));
+	bus.add(new Bus("18-3", line18));
+	bus.add(new Bus("100-3", line100));
+	bus.add(new Bus("18-4", line18));
+	bus.add(new Bus("100-4", line100));
+	bus.add(new Bus("18-5", line18));
+	bus.add(new Bus("100-5", line100));
 	DuispatcherStation duispatcherStation = new DuispatcherStation();
 	duispatcherStation.startShift(bus);
     }
-    
+
 }
