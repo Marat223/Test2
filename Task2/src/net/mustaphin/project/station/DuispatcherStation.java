@@ -19,7 +19,7 @@ import net.mustaphin.project.bus.Bus;
 public class DuispatcherStation {
 
     public void startShift(List<Bus> busPark) throws InterruptedException, ExecutionException {
-	ExecutorService executorService = Executors.newFixedThreadPool(busPark.size());
+	ExecutorService executorService = Executors.newSingleThreadExecutor();
 	for (Bus bus : busPark) {
 	    Future<Integer> submit = executorService.submit(bus);
 //	    System.out.println(submit.get());

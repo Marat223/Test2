@@ -11,8 +11,6 @@ package net.mustaphin.project.passenger;
  */
 public class Passenger {
 
-    public String name = "Пассажир";
-
     public Passenger() {
     }
 
