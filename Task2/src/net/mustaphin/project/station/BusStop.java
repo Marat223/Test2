@@ -23,7 +23,7 @@ import net.mustaphin.project.passenger.Passenger;
 public class BusStop {
 
     private ReentrantLock lock = new ReentrantLock();
-    private List<Passenger> passengerBusStop = Arrays.asList(new Passenger(), new Passenger(), new Passenger());
+    private static List<Passenger> passengerBusStop = new ArrayList<>(Arrays.asList(new Passenger(), new Passenger(), new Passenger()));
     private Semaphore semaphore;
     private String name;
 
@@ -54,17 +54,17 @@ public class BusStop {
 	if (0 < passengerBusStop.size()) {
 	    Iterator<Passenger> passengerIterator = passengerBusStop.iterator();
 	    int random = new Random().nextInt(passengerBusStop.size()) - 1;
-//	    System.out.println("Random to standing on stop-bus: " + random);
+	    System.out.println("Random to standing on stop-bus: " + random);
 	    while (passengerIterator.hasNext()) {
-//		lock.lock();
+		lock.lock();
 		System.out.println("Passengers try to board the bus");
 //		if (random / 2 > passengerIn.size()) {
 		Passenger replaced = passengerIterator.next();
-//		goInBusPassenger.add(replaced);
-		passengerIterator.remove();//TODO не удаляются
+		goInBusPassenger.add(replaced);
+		passengerIterator.remove();
 		System.out.println("Passanger got in bus");
-//		lock.unlock();
-//		TimeUnit.MILLISECONDS.sleep(400);
+		lock.unlock();
+		TimeUnit.MILLISECONDS.sleep(200);
 //		}
 	    }
 	}
@@ -79,12 +79,14 @@ public class BusStop {
 	    System.out.println("Random to exit from bus: " + random);
 	    while (passenger.hasNext()) {
 		System.out.println("Passengers try to leave the bus");
-		if (random / 2 > passengerBus.size()) {
-		    goOutBusPassenger.add(passenger.next());
-		    passenger.remove();
-		    System.out.println("Passanger got out bus");
-		    TimeUnit.MILLISECONDS.sleep(200);
-		}
+//		if (random / 2 > passengerBus.size()) {
+		lock.lock();
+		goOutBusPassenger.add(passenger.next());
+		passenger.remove();
+		System.out.println("Passanger got out bus");
+		lock.unlock();
+		TimeUnit.MILLISECONDS.sleep(200);
+//		}
 	    }
 	}
 	return goOutBusPassenger;
