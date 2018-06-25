@@ -39,20 +39,20 @@ public class PassengerGenerator {
     private PassengerGenerator() {
     }
 
-    public void passangerComeAndGone(List<Passenger> passengers) {
-	if (0 != passengers.size()) {
-	    ListIterator<Passenger> passanger = passengers.listIterator();
-	    int random = new Random().nextInt(passengers.size());
-	    if (passengers.size() > random / 2) {
+    public void passangerComeAndGone(List<Passenger> passengerAlreadyPlaced) {//TODO
+	if (passengerAlreadyPlaced.isEmpty()) {
+	    int random = new Random().nextInt(7);
+	    while (0 != random) {
+		passengerAlreadyPlaced.add(new Passenger());
+		random--;
+	    }
+	} else {
+	    ListIterator<Passenger> passanger = passengerAlreadyPlaced.listIterator();
+	    int random = new Random().nextInt(passengerAlreadyPlaced.size());
+	    if (passengerAlreadyPlaced.size() > random / 2) {
 		while (passanger.hasNext()) {
 		    passanger.remove();
 		}
-	    }
-	} else {
-	    int random = new Random().nextInt(7);
-	    while (0 == random) {
-		passengers.add(new Passenger());
-		random--;
 	    }
 	}
     }

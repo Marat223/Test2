@@ -13,8 +13,11 @@ import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.mustaphin.project.bus.Bus;
 import net.mustaphin.project.passenger.Passenger;
+import net.mustaphin.project.passenger.PassengerGenerator;
 
 /**
  *
@@ -29,66 +32,55 @@ public class BusStop {
 
     public BusStop(int permit, String name) {
 	this.semaphore = new Semaphore(permit);
-//	passengerBusStop = Arrays.asList(new Passenger(), new Passenger(), new Passenger());
 	this.name = name;
     }
 
     public void interract(Bus bus) {
 	List<Passenger> passengerBus = bus.getPassanger();
+	String messages[][] = {
+	    {"Passenger try to enter in bus: " + bus.getRouteName(),
+		"Passanger get in bus: " + bus.getRouteName()},
+	    {"Passengers try to leave the bus: " + bus.getRouteName(),
+		"Passanger got out bus: " + bus.getRouteName()}};
 	try {
 	    semaphore.acquire();
-	    System.out.println("Bus " + bus.getRouteName() + " came on bus-stop " + name);
+	    System.out.println("+++++++++++++++++++++++++++++++++++++++++++++\nBus " + bus.getRouteName() + " came on bus-stop " + name);
 	    System.out.println("Passengers value in bus: " + passengerBus.size() + ", Passengers value in bus-stop:" + passengerBusStop.size());
-	    passengerBusStop.addAll(goOutBus(passengerBus));
-	    passengerBus.addAll(goOnBus());
+	    passengerBus.addAll(passangerMoving(passengerBusStop, messages[0]));
+	    passengerBusStop.addAll(passangerMoving(passengerBus, messages[1]));
+	    System.out.println("Passengers value in bus: " + passengerBus.size() + ", Passengers value in bus-stop:" + passengerBusStop.size());
 	} catch (InterruptedException ex) {
 	} finally {
 	    semaphore.release();
 	}
-	System.out.println("Bus " + bus.getRouteName() + " leave bus-stop " + name);
-//	PassengerGenerator.getInstance().passangerComeAndGone(passengerBusStop);
+	System.out.println("Bus " + bus.getRouteName() + " leave bus-stop " + name + "\n+++++++++++++++++++++++++++++++++++++++++++++");
+	PassengerGenerator.getInstance().passangerComeAndGone(passengerBusStop);
     }
 
-    private List<Passenger> goOnBus() throws InterruptedException {
-	List<Passenger> goInBusPassenger = new ArrayList<>();
-	if (0 < passengerBusStop.size()) {
-	    Iterator<Passenger> passengerIterator = passengerBusStop.iterator();
-	    int random = new Random().nextInt(passengerBusStop.size()) - 1;
-	    System.out.println("Random to standing on stop-bus: " + random);
-	    while (passengerIterator.hasNext()) {
-		lock.lock();
-		System.out.println("Passengers try to board the bus");
-//		if (random / 2 > passengerIn.size()) {
-		Passenger replaced = passengerIterator.next();
-		goInBusPassenger.add(replaced);
-		passengerIterator.remove();
-		System.out.println("Passanger got in bus");
-		lock.unlock();
-		TimeUnit.MILLISECONDS.sleep(200);
-//		}
-	    }
-	}
-	return goInBusPassenger;
-    }
-
-    private List<Passenger> goOutBus(List<Passenger> passengerBus) throws InterruptedException {
-	List<Passenger> goOutBusPassenger = new ArrayList<>();
-	if (0 < passengerBus.size()) {
-	    Iterator<Passenger> passenger = passengerBus.iterator();
-	    int random = new Random().nextInt(passengerBus.size()) - 1;
-	    System.out.println("Random to exit from bus: " + random);
+    private List<Passenger> passangerMoving(List<Passenger> passengersList, String message[]) {
+	List<Passenger> passangerMoving = new ArrayList<>();
+	if (0 < passengersList.size()) {
+	    Iterator<Passenger> passenger = passengersList.iterator();
+	    int random = new Random().nextInt(passengersList.size()) - 1;
+	    System.out.println("Random: " + random);
 	    while (passenger.hasNext()) {
-		System.out.println("Passengers try to leave the bus");
-//		if (random / 2 > passengerBus.size()) {
-		lock.lock();
-		goOutBusPassenger.add(passenger.next());
-		passenger.remove();
-		System.out.println("Passanger got out bus");
-		lock.unlock();
-		TimeUnit.MILLISECONDS.sleep(200);
+		System.out.println(message[0]);
+//		if (random >= passengersList.size()) {//TODO
+		try {
+		    lock.lock();
+		    passangerMoving.add(passenger.next());
+		    TimeUnit.MILLISECONDS.sleep(200);
+		    passenger.remove();
+		    System.out.println(message[1]);
+
+		} catch (InterruptedException ex) {
+		    Logger.getLogger(BusStop.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
+		    lock.unlock();
+		}
 //		}
 	    }
 	}
-	return goOutBusPassenger;
+	return passangerMoving;
     }
 }
