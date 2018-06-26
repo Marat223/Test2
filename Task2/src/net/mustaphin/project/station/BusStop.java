@@ -44,7 +44,7 @@ public class BusStop {
 		"Passanger got out bus: " + bus.getRouteName()}};
 	try {
 	    semaphore.acquire();
-	    System.out.println("+++++++++++++++++++++++++++++++++++++++++++++\nBus " + bus.getRouteName() + " came on bus-stop " + name);
+	    System.out.println("\nBus " + bus.getRouteName() + " came on bus-stop " + name);
 	    System.out.println("Passengers value in bus: " + passengerBus.size() + ", Passengers value in bus-stop:" + passengerBusStop.size());
 	    passengerBus.addAll(passangerMoving(passengerBusStop, messages[0]));
 	    passengerBusStop.addAll(passangerMoving(passengerBus, messages[1]));
@@ -53,32 +53,32 @@ public class BusStop {
 	} finally {
 	    semaphore.release();
 	}
-	System.out.println("Bus " + bus.getRouteName() + " leave bus-stop " + name + "\n+++++++++++++++++++++++++++++++++++++++++++++");
+	System.out.println("Bus " + bus.getRouteName() + " leave bus-stop " + name + "\n");
 	PassengerGenerator.getInstance().passangerComeAndGone(passengerBusStop);
     }
 
     private List<Passenger> passangerMoving(List<Passenger> passengersList, String message[]) {
 	List<Passenger> passangerMoving = new ArrayList<>();
-	if (0 < passengersList.size()) {
+	if (!passengersList.isEmpty()) {
 	    Iterator<Passenger> passenger = passengersList.iterator();
-	    int random = new Random().nextInt(passengersList.size()) - 1;
+	    int random = new Random().nextInt(passengersList.size()) + 1;
 	    System.out.println("Random: " + random);
 	    while (passenger.hasNext()) {
+		Passenger passengerReplace = passenger.next();
 		System.out.println(message[0]);
-//		if (random >= passengersList.size()) {//TODO
-		try {
-		    lock.lock();
-		    passangerMoving.add(passenger.next());
-		    TimeUnit.MILLISECONDS.sleep(200);
-		    passenger.remove();
-		    System.out.println(message[1]);
-
-		} catch (InterruptedException ex) {
-		    Logger.getLogger(BusStop.class.getName()).log(Level.SEVERE, null, ex);
-		} finally {
-		    lock.unlock();
+		if (random >= passengersList.size()) {
+		    try {
+			lock.lock();
+			passangerMoving.add(passengerReplace);
+			TimeUnit.MILLISECONDS.sleep(200);
+			passenger.remove();
+			System.out.println(message[1]);
+		    } catch (InterruptedException ex) {
+			Logger.getLogger(BusStop.class.getName()).log(Level.SEVERE, null, ex);
+		    } finally {
+			lock.unlock();
+		    }
 		}
-//		}
 	    }
 	}
 	return passangerMoving;

@@ -22,7 +22,7 @@ public class DuispatcherStation {
 	ExecutorService executorService = Executors.newSingleThreadExecutor();
 	for (Bus bus : busPark) {
 	    Future<Integer> submit = executorService.submit(bus);
-//	    System.out.println(submit.get());
+//	    System.out.println(submit.get());//TODO
 	}
 	executorService.shutdown();
 	System.out.println("TOTAL: ");

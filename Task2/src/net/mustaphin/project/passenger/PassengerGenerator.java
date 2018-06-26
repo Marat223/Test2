@@ -41,19 +41,23 @@ public class PassengerGenerator {
 
     public void passangerComeAndGone(List<Passenger> passengerAlreadyPlaced) {//TODO
 	if (passengerAlreadyPlaced.isEmpty()) {
+	    System.out.println("+++++++++++++++++++++++++++");
 	    int random = new Random().nextInt(7);
 	    while (0 != random) {
 		passengerAlreadyPlaced.add(new Passenger());
 		random--;
 	    }
+	    System.out.println("Passengers generated are: " + passengerAlreadyPlaced.size());
 	} else {
+	    System.out.println("------------------------------");
+	    int last = passengerAlreadyPlaced.size() - 1;
 	    ListIterator<Passenger> passanger = passengerAlreadyPlaced.listIterator();
-	    int random = new Random().nextInt(passengerAlreadyPlaced.size());
-	    if (passengerAlreadyPlaced.size() > random / 2) {
-		while (passanger.hasNext()) {
-		    passanger.remove();
-		}
+	    int random = new Random().nextInt(passengerAlreadyPlaced.size()) + 1;
+	    while (last >= random / 2) {
+		passengerAlreadyPlaced.remove(last--);
 	    }
+	    System.out.println("Passengers value after removing is: " + passengerAlreadyPlaced.size());
 	}
+	System.out.println("Passengers new value in the stop-bus is: " + passengerAlreadyPlaced.size());
     }
 }
