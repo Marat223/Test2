@@ -18,14 +18,19 @@ import net.mustaphin.project.station.BusStop;
  */
 public class Bus implements Callable<Integer> {
 
-    private int sum = 0;
-    private final List<Passenger> passengerIn = new ArrayList<>();
+    private int sum;
+
+    private  List<Passenger> passengerIn = new ArrayList<>();
     private List<BusStop> route;
     private String routeName;
 
     public Bus(String routeName, List<BusStop> route) {
 	this.route = route;
 	this.routeName = routeName;
+    }
+
+    public void setSum(int sum) {
+	this.sum = sum;
     }
 
     public String getRouteName() {

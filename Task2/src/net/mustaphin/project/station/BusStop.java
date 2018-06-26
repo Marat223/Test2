@@ -29,6 +29,7 @@ public class BusStop {
     private static List<Passenger> passengerBusStop = new ArrayList<>(Arrays.asList(new Passenger(), new Passenger(), new Passenger()));
     private Semaphore semaphore;
     private String name;
+    Bus bus;
 
     public BusStop(int permit, String name) {
 	this.semaphore = new Semaphore(permit);
@@ -36,6 +37,7 @@ public class BusStop {
     }
 
     public void interract(Bus bus) {
+	this.bus = bus;
 	List<Passenger> passengerBus = bus.getPassanger();
 	String messages[][] = {
 	    {"Passenger try to enter in bus: " + bus.getRouteName(),
@@ -50,6 +52,7 @@ public class BusStop {
 	    passengerBusStop.addAll(passangerMoving(passengerBus, messages[1]));
 	    System.out.println("Passengers value in bus: " + passengerBus.size() + ", Passengers value in bus-stop:" + passengerBusStop.size());
 	} catch (InterruptedException ex) {
+	    
 	} finally {
 	    semaphore.release();
 	}
