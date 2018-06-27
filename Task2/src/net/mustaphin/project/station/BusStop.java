@@ -52,7 +52,7 @@ public class BusStop {
 	    passengerBusStop.addAll(passangerMoving(passengerBus, messages[1]));
 	    System.out.println("Passengers value in bus: " + passengerBus.size() + ", Passengers value in bus-stop:" + passengerBusStop.size());
 	} catch (InterruptedException ex) {
-	    
+
 	} finally {
 	    semaphore.release();
 	}
