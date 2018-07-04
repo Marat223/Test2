@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import net.mustaphin.project.constant.Message;
 
 /**
  *
@@ -41,23 +42,23 @@ public class PassengerGenerator {
 
     public void passangerComeAndGone(List<Passenger> passengerAlreadyPlaced) {//TODO
 	if (passengerAlreadyPlaced.isEmpty()) {
-	    System.out.println("+++++++++++++++++++++++++++");
+	    System.out.println(Message.SEPARATION_START_GENERATING);
 	    int random = new Random().nextInt(7);
 	    while (0 != random) {
 		passengerAlreadyPlaced.add(new Passenger());
 		random--;
 	    }
-	    System.out.println("Passengers generated are: " + passengerAlreadyPlaced.size());
+	    System.out.println(Message.GENERATED + passengerAlreadyPlaced.size());
 	} else {
-	    System.out.println("------------------------------");
+	    System.out.println(Message.SEPARATION_STOP_GENERATING);
 	    int last = passengerAlreadyPlaced.size() - 1;
 	    ListIterator<Passenger> passanger = passengerAlreadyPlaced.listIterator();
 	    int random = new Random().nextInt(passengerAlreadyPlaced.size()) + 1;
 	    while (last >= random / 2) {
 		passengerAlreadyPlaced.remove(last--);
 	    }
-	    System.out.println("Passengers value after removing is: " + passengerAlreadyPlaced.size());
+	    System.out.println(Message.REMOVED + passengerAlreadyPlaced.size());
 	}
-	System.out.println("Passengers new value in the stop-bus is: " + passengerAlreadyPlaced.size());
+	System.out.println(Message.TOTAL_PASSENGERS + passengerAlreadyPlaced.size());
     }
 }

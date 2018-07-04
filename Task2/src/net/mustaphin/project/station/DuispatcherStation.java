@@ -22,16 +22,12 @@ public class DuispatcherStation {
     public void startShift(List<Bus> busPark) throws InterruptedException, ExecutionException {
 	ExecutorService executorService = Executors.newSingleThreadExecutor();
 	List<Future<Integer>> totalSum = new ArrayList<>();
+	int total = 0;
 	for (Bus bus : busPark) {
-
 	    Future<Integer> submit = executorService.submit(bus);
-	    totalSum.add(submit);
-	    System.out.println(submit.get() + " SUBMIT");
-	}
-	for (Future<Integer> future : totalSum) {
-	    System.out.println(future.get() + " TOTAL");
+	    total += submit.get();
 	}
 	executorService.shutdown();
-	System.out.println("TOTAL: ");
+	System.out.println("TOTAL: " + total);
     }
 }

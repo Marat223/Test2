@@ -20,7 +20,7 @@ public class Bus implements Callable<Integer> {
 
     private int sum;
 
-    private  List<Passenger> passengerIn = new ArrayList<>();
+    private List<Passenger> passengerIn = new ArrayList<>();
     private List<BusStop> route;
     private String routeName;
 
@@ -48,6 +48,11 @@ public class Bus implements Callable<Integer> {
 
     public List<Passenger> getPassanger() {
 	return passengerIn;
+    }
+
+    @Override
+    public String toString() {
+	return "Bus{" + "routeName=" + routeName + '}';
     }
 
 }

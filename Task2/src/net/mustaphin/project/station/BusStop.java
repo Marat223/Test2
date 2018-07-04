@@ -16,6 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.mustaphin.project.bus.Bus;
+import net.mustaphin.project.constant.Message;
 import net.mustaphin.project.passenger.Passenger;
 import net.mustaphin.project.passenger.PassengerGenerator;
 
@@ -25,42 +26,37 @@ import net.mustaphin.project.passenger.PassengerGenerator;
  */
 public class BusStop {
 
-    private ReentrantLock lock = new ReentrantLock();
-    private static List<Passenger> passengerBusStop = new ArrayList<>(Arrays.asList(new Passenger(), new Passenger(), new Passenger()));
+    private List<Passenger> passengerBusStop = new ArrayList<>(Arrays.asList(new Passenger(), new Passenger(), new Passenger()));//TODO
     private Semaphore semaphore;
     private String name;
-    Bus bus;
 
     public BusStop(int permit, String name) {
 	this.semaphore = new Semaphore(permit);
 	this.name = name;
     }
 
-    public void interract(Bus bus) {
-	this.bus = bus;
+    public void interract(Bus bus) {//TODO получние оплаты
 	List<Passenger> passengerBus = bus.getPassanger();
-	String messages[][] = {
-	    {"Passenger try to enter in bus: " + bus.getRouteName(),
-		"Passanger get in bus: " + bus.getRouteName()},
-	    {"Passengers try to leave the bus: " + bus.getRouteName(),
-		"Passanger got out bus: " + bus.getRouteName()}};
+	String messages[][] = {{Message.ENTERING[0] + bus.getRouteName(), Message.ENTERING[1] + bus.getRouteName()},
+	{Message.LEAVING[0] + bus.getRouteName(), Message.LEAVING[1] + bus.getRouteName()}};
 	try {
 	    semaphore.acquire();
-	    System.out.println("\nBus " + bus.getRouteName() + " came on bus-stop " + name);
-	    System.out.println("Passengers value in bus: " + passengerBus.size() + ", Passengers value in bus-stop:" + passengerBusStop.size());
+	    System.out.println(bus.getRouteName() + " came on " + name);
+	    System.out.println(Message.ON_BUS + passengerBus.size() + Message.ON_BUSSTOP + passengerBusStop.size());
 	    passengerBus.addAll(passangerMoving(passengerBusStop, messages[0]));
 	    passengerBusStop.addAll(passangerMoving(passengerBus, messages[1]));
-	    System.out.println("Passengers value in bus: " + passengerBus.size() + ", Passengers value in bus-stop:" + passengerBusStop.size());
+	    System.out.println(Message.ON_BUS + passengerBus.size() + Message.ON_BUSSTOP + passengerBusStop.size());
 	} catch (InterruptedException ex) {
-
+	    //TODO
 	} finally {
 	    semaphore.release();
 	}
-	System.out.println("Bus " + bus.getRouteName() + " leave bus-stop " + name + "\n");
+	System.out.println(bus.getRouteName() + " leave bus-stop " + name + "\n");
 	PassengerGenerator.getInstance().passangerComeAndGone(passengerBusStop);
     }
 
     private List<Passenger> passangerMoving(List<Passenger> passengersList, String message[]) {
+	ReentrantLock lock = new ReentrantLock();
 	List<Passenger> passangerMoving = new ArrayList<>();
 	if (!passengersList.isEmpty()) {
 	    Iterator<Passenger> passenger = passengersList.iterator();
