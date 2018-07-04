@@ -35,7 +35,7 @@ public class BusStop {
 	this.passengerBusStop.addAll(passengerBusStop);
     }
 
-    public void interract(Bus bus) {//TODO получние оплаты
+    public void interract(Bus bus) {
 	List<Passenger> passengerBus = bus.getPassanger();
 	String messages[][] = {{Message.ENTERING[0] + bus.getRouteName(), Message.ENTERING[1] + bus.getRouteName()},
 	{Message.LEAVING[0] + bus.getRouteName(), Message.LEAVING[1] + bus.getRouteName()}};
