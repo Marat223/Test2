@@ -43,7 +43,9 @@ public class BusStop {
 	    semaphore.acquire();
 	    System.out.println(bus.getRouteName() + " came on " + name);
 	    System.out.println(Message.ON_BUS + passengerBus.size() + Message.ON_BUSSTOP + passengerBusStop.size());
-	    passengerBus.addAll(passangerMoving(passengerBusStop, messages[0]));
+	    List<Passenger> goingInBus = passangerMoving(passengerBusStop, messages[0]);
+	    passengerBus.addAll(goingInBus);
+	    bus.pay(goingInBus.size());
 	    passengerBusStop.addAll(passangerMoving(passengerBus, messages[1]));
 	    System.out.println(Message.ON_BUS + passengerBus.size() + Message.ON_BUSSTOP + passengerBusStop.size());
 	} catch (InterruptedException ex) {

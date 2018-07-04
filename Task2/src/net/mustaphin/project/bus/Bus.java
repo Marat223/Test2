@@ -29,8 +29,12 @@ public class Bus implements Callable<Integer> {
 	this.routeName = routeName;
     }
 
-    public void setSum(int sum) {
-	this.sum = sum;
+    public int getSum() {
+	return sum;
+    }
+
+    public void pay(int sum) {
+	this.sum += sum;
     }
 
     public String getRouteName() {
