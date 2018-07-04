@@ -5,7 +5,6 @@
  */
 package net.mustaphin.project.station;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -21,7 +20,6 @@ public class DuispatcherStation {
 
     public void startShift(List<Bus> busPark) throws InterruptedException, ExecutionException {
 	ExecutorService executorService = Executors.newSingleThreadExecutor();
-	List<Future<Integer>> totalSum = new ArrayList<>();
 	int total = 0;
 	for (Bus bus : busPark) {
 	    Future<Integer> submit = executorService.submit(bus);

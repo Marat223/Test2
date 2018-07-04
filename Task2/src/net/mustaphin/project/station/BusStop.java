@@ -6,7 +6,6 @@
 package net.mustaphin.project.station;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -26,13 +25,14 @@ import net.mustaphin.project.passenger.PassengerGenerator;
  */
 public class BusStop {
 
-    private List<Passenger> passengerBusStop = new ArrayList<>(Arrays.asList(new Passenger(), new Passenger(), new Passenger()));//TODO
+    private List<Passenger> passengerBusStop = new ArrayList<>();
     private Semaphore semaphore;
     private String name;
 
-    public BusStop(int permit, String name) {
+    public BusStop(int permit, String name, List<Passenger> passengerBusStop) {
 	this.semaphore = new Semaphore(permit);
 	this.name = name;
+	this.passengerBusStop.addAll(passengerBusStop);
     }
 
     public void interract(Bus bus) {//TODO получние оплаты
@@ -47,7 +47,7 @@ public class BusStop {
 	    passengerBusStop.addAll(passangerMoving(passengerBus, messages[1]));
 	    System.out.println(Message.ON_BUS + passengerBus.size() + Message.ON_BUSSTOP + passengerBusStop.size());
 	} catch (InterruptedException ex) {
-	    //TODO
+	    ex.printStackTrace();
 	} finally {
 	    semaphore.release();
 	}
